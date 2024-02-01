@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0%;
+            padding: 0%;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #232323;
+        }
+
+        .main-content {
+            width: 80%;
+            padding: 10px 40px;
+            background-color: #343434;
+            border-radius: 5px;
+            margin: 20px auto;
+            box-sizing: 0px 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            color: #fff;
+            font-size: 15px;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 2px 10px;
+
+        }
+
+        .navbar {
+            padding: 4px 30px 10px 0px;
+            border-bottom: #232323 3px solid;
+        }
+
+        .page-content {
+            text-align: center;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-content">
+        <div class="navbar">
+            <a href="Home">Home</a>
+            <a href="Products">Products</a>
+            <a href="About">About</a>
+            <a href="Contact">Contact</a>
+
+        </div>
+        <div class="page-content">
+            <h3>{{%content%}}</h3>
+
+        </div>
+    </div>
+</body>
+
+</html>
