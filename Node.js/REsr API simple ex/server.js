@@ -31,6 +31,25 @@ app.post("/api/v1/movies", (req, res) => {
         })
     })
 });
+
+app.get("/api/v1/movies/:id",(req,res)=>{
+    const serchId = +req.params.id ;
+    let movie = movies.find(el => el.id === serchId);
+
+    if(!movie){
+        return res.status(404).json({
+            status : "fail",
+            message : `movie with ID ${serchId} not found`
+        })
+    }
+
+    res.status(200).json({
+        status : "success",
+        data : {
+            movie : movie
+        }
+    })
+})
 const port = 3000;
 
 app.listen(port, () => {
