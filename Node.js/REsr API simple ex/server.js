@@ -6,7 +6,8 @@ const app = express();
 const movies = JSON.parse(fs.readFileSync("./data/movies.json", "UTF-8"));
 app.use(express.json());
 
-app.get("/api/v1/movies", (req, res) => {
+
+const getMovies = (req, res) => {
     res.status(200).json({
         status: "success",
         count: movies.length,
@@ -14,9 +15,9 @@ app.get("/api/v1/movies", (req, res) => {
             movies: movies
         }
     })
-});
+};
 
-app.post("/api/v1/movies", (req, res) => {
+const createMovie = (req, res) => {
     const lastIndexId = movies[movies.length - 1].id + 1;
     const newIndex = Object.assign({ id: lastIndexId }, req.body);
 
@@ -30,9 +31,9 @@ app.post("/api/v1/movies", (req, res) => {
             }
         })
     })
-});
+};
 
-app.get("/api/v1/movies/:id", (req, res) => {
+const getMovie = (req, res) => {
     const serchId = +req.params.id;
     let movie = movies.find(el => el.id === serchId);
 
@@ -49,9 +50,9 @@ app.get("/api/v1/movies/:id", (req, res) => {
             movie: movie
         }
     })
-});
+};
 
-app.patch("/api/v1/movies/:id", (req, res) => {
+const updateMovie = (req, res) => {
     let id = +req.params.id;
     let movieToUpdate = movies.find(el => el.id === id);
 
@@ -76,33 +77,54 @@ app.patch("/api/v1/movies/:id", (req, res) => {
             }
         })
     })
+};
 
-});
-
-app.delete("/api/v1/movies/:id",(req,res)=>{
+const deleteMovie = (req, res) => {
     const id = +req.params.id;
     const movieToDelete = movies.find(el => el.id === id);
 
-    if(!movieToDelete){
+    if (!movieToDelete) {
         return res.status(400).json({
-            status : "fail",
-            message : `the movie with ID ${id} is not found`
+            status: "fail",
+            message: `the movie with ID ${id} is not found`
         })
 
     }
 
     const index = movies.indexOf(movieToDelete);
-    movies.splice(index,1);
+    movies.splice(index, 1);
 
-    fs.writeFile("./data/movies.json",JSON.stringify(movies),(error)=>{
+    fs.writeFile("./data/movies.json", JSON.stringify(movies), (error) => {
         res.status(204).json({
             status: "success",
-            data :{
-                movie : null
+            data: {
+                movie: null
             }
         })
     })
-})
+};
+
+// app.get("/api/v1/movies", getMovies);
+
+// app.post("/api/v1/movies", createMovie);
+
+// app.get("/api/v1/movies/:id", getMovie);
+
+// app.patch("/api/v1/movies/:id", updateMovie);
+
+// app.delete("/api/v1/movies/:id", deleteMovie);
+
+
+app.route("/api/v1/movies")
+    .get(getMovies)
+    .post(createMovie)
+
+app.route("/api/v1/movies/:id")
+    .get(getMovie)
+    .patch(updateMovie)
+    .delete(deleteMovie)
+
+
 const port = 3000;
 
 app.listen(port, () => {
