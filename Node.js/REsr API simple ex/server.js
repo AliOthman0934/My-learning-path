@@ -1,5 +1,5 @@
 import { error } from "console";
-import express from "express";
+import express, { json } from "express";
 import fs from "fs"
 
 const app = express();
@@ -32,23 +32,52 @@ app.post("/api/v1/movies", (req, res) => {
     })
 });
 
-app.get("/api/v1/movies/:id",(req,res)=>{
-    const serchId = +req.params.id ;
+app.get("/api/v1/movies/:id", (req, res) => {
+    const serchId = +req.params.id;
     let movie = movies.find(el => el.id === serchId);
 
-    if(!movie){
+    if (!movie) {
         return res.status(404).json({
-            status : "fail",
-            message : `movie with ID ${serchId} not found`
+            status: "fail",
+            message: `movie with ID ${serchId} not found`
         })
     }
 
     res.status(200).json({
-        status : "success",
-        data : {
-            movie : movie
+        status: "success",
+        data: {
+            movie: movie
         }
     })
+});
+
+app.patch("/api/v1/movies/:id", (req, res) => {
+    let id = +req.params.id;
+    let movieToUpdate = movies.find(el => el.id === id);
+
+    if (!movieToUpdate) {
+        return res.status(400).json({
+            status: "fail",
+            message: `movie with ID ${id} is not found`
+
+        })
+    }
+
+    let index = movies.indexOf(movieToUpdate);
+    console.log(index);
+    Object.assign(movieToUpdate, req.body);
+
+    movies[index] = movieToUpdate;
+
+    fs.writeFile("./data/movies.json", JSON.stringify(movieToUpdate), (error) => {
+        res.status(200).json({
+            status: "success",
+            data: {
+                movie: movieToUpdate
+            }
+        })
+    })
+
 })
 const port = 3000;
 
