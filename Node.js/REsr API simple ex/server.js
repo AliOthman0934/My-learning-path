@@ -64,12 +64,11 @@ app.patch("/api/v1/movies/:id", (req, res) => {
     }
 
     let index = movies.indexOf(movieToUpdate);
-    console.log(index);
     Object.assign(movieToUpdate, req.body);
 
     movies[index] = movieToUpdate;
 
-    fs.writeFile("./data/movies.json", JSON.stringify(movieToUpdate), (error) => {
+    fs.writeFile("./data/movies.json", JSON.stringify(movies), (error) => {
         res.status(200).json({
             status: "success",
             data: {
@@ -78,6 +77,31 @@ app.patch("/api/v1/movies/:id", (req, res) => {
         })
     })
 
+});
+
+app.delete("/api/v1/movies/:id",(req,res)=>{
+    const id = +req.params.id;
+    const movieToDelete = movies.find(el => el.id === id);
+
+    if(!movieToDelete){
+        return res.status(400).json({
+            status : "fail",
+            message : `the movie with ID ${id} is not found`
+        })
+
+    }
+
+    const index = movies.indexOf(movieToDelete);
+    movies.splice(index,1);
+
+    fs.writeFile("./data/movies.json",JSON.stringify(movies),(error)=>{
+        res.status(204).json({
+            status: "success",
+            data :{
+                movie : null
+            }
+        })
+    })
 })
 const port = 3000;
 
