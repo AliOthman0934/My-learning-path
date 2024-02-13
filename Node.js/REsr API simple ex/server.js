@@ -6,10 +6,15 @@ const app = express();
 const movies = JSON.parse(fs.readFileSync("./data/movies.json", "UTF-8"));
 app.use(express.json());
 
+app.use((req,res,next)=>{
+    req.requestedAt = new Date().toISOString();
+    next();
+})
 
 const getMovies = (req, res) => {
     res.status(200).json({
         status: "success",
+        requestedAt : req.requestedAt,
         count: movies.length,
         data: {
             movies: movies
