@@ -1,4 +1,4 @@
-import fs from "fs"
+const fs = require("fs");
 const movies = JSON.parse(fs.readFileSync("./data/movies.json", "UTF-8"));
 
 exports.getMovies = (req, res) => {
