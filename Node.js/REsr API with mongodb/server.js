@@ -17,7 +17,7 @@ mongoose.connect(process.env.CONN_STR, {
         console.error("Error connecting to the database:", error);
     });
 
-const movieSchema =  mongoose.Schema({
+const movieSchema = mongoose.Schema({
     name: {
         type: String,
         required: [true, "name is required filed"],
@@ -38,7 +38,22 @@ const movieSchema =  mongoose.Schema({
 
 });
 
-const movieModel = mongoose.model("movie", movieSchema); 
+const Movie = mongoose.model("Movie", movieSchema);
+
+const moveiTest = new Movie({
+    name: "Die hard",
+    description: "Action movie",
+    duration: 180,
+    rating: 4.5
+})
+
+moveiTest.save()
+    .then(doc => {
+        console.log(doc)
+    })
+    .catch(err => {
+        console.log(`Some error has occured ${err}`)
+    })
 
 const port = 3000;
 
