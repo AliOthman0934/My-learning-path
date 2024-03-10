@@ -1,6 +1,21 @@
 const Movie = require("../modles/movieModle");
 
-exports.getMovies = (req, res) => {
+exports.getMovies = async (req, res) => {
+    try {
+        const movie = await Movie.find();
+        res.status(200).json({
+            status: "success",
+            length: movie.length,
+            data: {
+                movie
+            }
+        })
+    } catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: err.message
+        })
+    }
 
 };
 
@@ -22,23 +37,52 @@ exports.createMovie = async (req, res) => {
 
 };
 
-exports.getMovie = (req, res) => {
+exports.getMovie = async (req, res) => {
+    try {
+        const movie = await Movie.findById(req.params.id);
+        res.status(200).json({
+            status: "success",
+            length: movie.length,
+            data: {
+                movie
+            }
+        })
+    } catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: err.message
+        })
+    }
 
 };
 
-exports.updateMovie = (req, res) => {
+exports.updateMovie = async (req, res) => {
+    try {
+        const updateMovie = await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidetors: true });
+        res.status(200).json({
+            status: "success",
+            data: {
+                movie: updateMovie
+            }
+        })
+    } catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: err.message
+        })
+    }
 
 };
 
-exports.deleteMovie = async(req, res) => {
-    try{
+exports.deleteMovie = async (req, res) => {
+    try {
         await Movie.findByIdAndDelete(req.params.id)
         res.status(204).json({
             status: "success",
             data: null
         })
 
-    }catch(err){
+    } catch (err) {
         res.status(404).json({
             status: "fail",
             message: err.message
