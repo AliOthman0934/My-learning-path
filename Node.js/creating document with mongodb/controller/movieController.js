@@ -1,8 +1,9 @@
+const { query } = require("express");
 const Movie = require("../modles/movieModle");
 
 exports.getMovies = async (req, res) => {
     try {
-        const movie = await Movie.find();
+        const movie = await Movie.find(req.query);
         res.status(200).json({
             status: "success",
             length: movie.length,
