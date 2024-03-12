@@ -4,12 +4,21 @@ const Movie = require("../modles/movieModle");
 exports.getMovies = async (req, res) => {
     try {
         let queryStr = JSON.stringify(req.query);
-            queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g,(match)=>{
-                return `$${match}`
-            })
-            const queryObj = JSON.parse(queryStr);
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => {
+            return `$${match}`
+        })
+        const queryObj = JSON.parse(queryStr);
 
-        const movie = await Movie.find(queryObj);
+        const query = Movie.find(queryObj);
+
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(",").join(" ");
+            query = query.sort(sortBy);
+        } else {
+            query = query.sort("-createdAt")
+        }
+
+        const movie = await query;
         res.status(200).json({
             status: "success",
             length: movie.length,
