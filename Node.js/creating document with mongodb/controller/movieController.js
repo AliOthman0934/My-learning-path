@@ -3,7 +3,13 @@ const Movie = require("../modles/movieModle");
 
 exports.getMovies = async (req, res) => {
     try {
-        const movie = await Movie.find(req.query);
+        let queryStr = JSON.stringify(req.query);
+            queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g,(match)=>{
+                return `$${match}`
+            })
+            const queryObj = JSON.parse(queryStr);
+
+        const movie = await Movie.find(queryObj);
         res.status(200).json({
             status: "success",
             length: movie.length,
